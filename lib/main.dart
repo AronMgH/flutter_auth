@@ -1,5 +1,6 @@
 import 'package:flt_challenge/constants/app_constants.dart';
 import 'package:flt_challenge/screen/login/login.dart';
+import 'package:flt_challenge/screen/register/register.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -15,7 +16,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Challenge',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: AppConstants.myPrimaryColor),
+        colorScheme: ColorScheme.fromSeed(seedColor: AppConstants.primaryColor),
         useMaterial3: true,
       ),
       debugShowCheckedModeBanner: false,
@@ -34,20 +35,31 @@ class HomePage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-
+        toolbarHeight: 220,
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-    
         title: Text(title),
       ),
-      body: const Center(
+      body: Center(
         child: Column(
-
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
-            Text(
+            const Text(
               'You have pushed the button this many times:',
             ),
-
+            GestureDetector(
+              onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const LoginScreen())),
+              child: const Padding(
+                padding:  EdgeInsets.all(16.0),
+                child:  Text("Login"),
+              ),
+            ),
+            GestureDetector(
+              onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const RegisterScreen())),
+              child: const Padding(
+                padding:  EdgeInsets.all(16.0),
+                child: Text("Register"),
+              ),
+            ),
           ],
         ),
       ),
