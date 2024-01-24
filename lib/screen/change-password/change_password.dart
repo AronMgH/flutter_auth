@@ -1,12 +1,12 @@
+import "package:flt_challenge/components/change_passwd_form.dart";
 import "package:flt_challenge/constants/app_strings.dart";
 import "package:flutter/material.dart";
 
 import "../../components/custom_app_bar.dart";
-import "../../components/reg_form.dart";
 import "../../constants/app_constants.dart";
 
-class RegisterScreen extends StatelessWidget {
-  const RegisterScreen({super.key});
+class ChangeePasswordScreen extends StatelessWidget {
+  const ChangeePasswordScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -16,13 +16,13 @@ class RegisterScreen extends StatelessWidget {
           preferredSize: Size(
               screen.width, AppConstants.defaultAppBarHeight * screen.height),
           child: const FAppBar(
-            header: LocaleStrings.registerPageHeader,
-            description: LocaleStrings.registerPageDescription,
+            header: LocaleStrings.changePasswordPageHeader,
+            description: LocaleStrings.changePasswordPageDescription,
           )),
       body: const SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.all(24.0),
-          child: RegForm(),
+          child: ChangePasswordForm(),
         ),
       ),
     );
