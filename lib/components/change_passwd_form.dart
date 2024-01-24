@@ -1,27 +1,28 @@
 import 'package:flt_challenge/bloc/auth_provider.dart';
 import 'package:flt_challenge/constants/app_constants.dart';
-import 'package:flt_challenge/constants/app_strings.dart';
-import 'package:flt_challenge/screen/login/login.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class RegForm extends StatefulWidget {
-  const RegForm({super.key});
+import '../constants/app_strings.dart';
+import '../screen/register/register.dart';
+
+class ChangePasswordForm extends StatefulWidget {
+  const ChangePasswordForm({super.key});
 
   @override
-  RegFormState createState() {
-    return RegFormState();
+  ChangePasswordFormState createState() {
+    return ChangePasswordFormState();
   }
 }
 
-class RegFormState extends State<RegForm> {
-  final _firstnameController = TextEditingController();
-  final _lastnameController = TextEditingController();
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
+class ChangePasswordFormState extends State<ChangePasswordForm> {
+  final _oldPasswordController = TextEditingController();
+  final _newPasswordController = TextEditingController();
   final _confirmationPasswordController = TextEditingController();
-  bool _hidePassword = true;
+
+  bool _hideOldPassword = true;
+  bool _hideNewPassword = true;
   bool _hideConfirmationPassword = true;
 
   // global key that uniquely identifies the Form widget and allows validation of the form.
@@ -29,15 +30,21 @@ class RegFormState extends State<RegForm> {
 
   @override
   void dispose() {
-    _firstnameController.dispose();
-    _emailController.dispose();
-    _passwordController.dispose();
+    _oldPasswordController.dispose();
+    _newPasswordController.dispose();
+    _confirmationPasswordController.dispose();
     super.dispose();
   }
 
-  void _togglePasswordVisibility() {
+  void _toggleOldPasswordVisibility() {
     setState(() {
-      _hidePassword = !_hidePassword;
+      _hideOldPassword = !_hideOldPassword;
+    });
+  }
+
+  void _toggleNewPasswordVisibility() {
+    setState(() {
+      _hideNewPassword = !_hideNewPassword;
     });
   }
 
@@ -54,74 +61,50 @@ class RegFormState extends State<RegForm> {
       child: Column(
         children: [
           TextFormField(
-            controller: _firstnameController,
+            controller: _oldPasswordController,
             validator: (value) {
               if (value == null || value.isEmpty) {
-                return LocaleStrings.firstNameError;
+                return LocaleStrings.oldPasswordError;
               }
               return null;
             },
-            decoration: const InputDecoration(
-              contentPadding: EdgeInsets.all(8),
-              labelText: LocaleStrings.firstNameLabel,
-              border: OutlineInputBorder(),
+            obscureText: _hideOldPassword,
+            decoration: InputDecoration(
+              errorMaxLines: 3,
+              suffixIcon: IconButton(
+                onPressed: _toggleOldPasswordVisibility,
+                icon: _hideOldPassword
+                    ? const Icon(Icons.visibility_off)
+                    : const Icon(Icons.visibility),
+              ),
+              contentPadding: const EdgeInsets.all(8),
+              labelText: LocaleStrings.oldPasswordLabel,
+              border: const OutlineInputBorder(),
             ),
           ),
           const SizedBox(height: 18),
           TextFormField(
-            controller: _lastnameController,
+            controller: _newPasswordController,
             validator: (value) {
               if (value == null || value.isEmpty) {
-                return LocaleStrings.lastNameError;
-              }
-              return null;
-            },
-            decoration: const InputDecoration(
-              contentPadding: EdgeInsets.all(8),
-              labelText: LocaleStrings.lastNameLabel,
-              border: OutlineInputBorder(),
-            ),
-          ),
-          const SizedBox(height: 18),
-          TextFormField(
-            controller: _emailController,
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return LocaleStrings.emailError;
-              } else if (!AppConstants.emailRegex.hasMatch(value)) {
-                return LocaleStrings.invalidEmailError;
-              }
-              return null;
-            },
-            decoration: const InputDecoration(
-              contentPadding: EdgeInsets.all(8),
-              labelText: LocaleStrings.emailLabel,
-              border: OutlineInputBorder(),
-            ),
-          ),
-          const SizedBox(height: 18),
-          TextFormField(
-            controller: _passwordController,
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return LocaleStrings.passwordError;
+                return LocaleStrings.newPasswordError;
               }
               // else if (!AppConstants.passwdRegex.hasMatch(value)) {
               //   return 'Password must contain at least one uppercase letter, one lowercase letter, one number, one special character, and must be at least 8 characters long';
               // }
               return null;
             },
-            obscureText: _hidePassword,
+            obscureText: _hideNewPassword,
             decoration: InputDecoration(
               errorMaxLines: 3,
               suffixIcon: IconButton(
-                onPressed: _togglePasswordVisibility,
-                icon: _hidePassword
+                onPressed: _toggleNewPasswordVisibility,
+                icon: _hideNewPassword
                     ? const Icon(Icons.visibility_off)
                     : const Icon(Icons.visibility),
               ),
               contentPadding: const EdgeInsets.all(8),
-              labelText: LocaleStrings.passwordLabel,
+              labelText: LocaleStrings.newPasswordLabel,
               border: const OutlineInputBorder(),
             ),
           ),
@@ -131,7 +114,7 @@ class RegFormState extends State<RegForm> {
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return LocaleStrings.confirmPasswordError;
-              } else if (_passwordController.text != value) {
+              } else if (_newPasswordController.text != value) {
                 return LocaleStrings.invalidConfirmPasswordError;
               }
               return null;
@@ -141,7 +124,7 @@ class RegFormState extends State<RegForm> {
               errorMaxLines: 3,
               suffixIcon: IconButton(
                 onPressed: _toggleConfirmationPasswordVisibility,
-                icon: _hidePassword
+                icon: _hideConfirmationPassword
                     ? const Icon(Icons.visibility_off)
                     : const Icon(Icons.visibility),
               ),
@@ -154,7 +137,7 @@ class RegFormState extends State<RegForm> {
           SizedBox(
             width: double.infinity,
             child: Consumer<AuthProvider>(
-              builder: (context, authModel, _) {
+              builder: (context, authProvider, child) {
                 return ElevatedButton(
                   style: ButtonStyle(
                       backgroundColor:
@@ -164,21 +147,18 @@ class RegFormState extends State<RegForm> {
                               borderRadius: BorderRadius.circular(8)))),
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
-                      authModel.register(
-                          _firstnameController.text,
-                          _lastnameController.text,
-                          _emailController.text,
-                          _passwordController.text,
+                      authProvider.changePassword(
+                          _oldPasswordController.text,
+                          _newPasswordController.text,
                           _confirmationPasswordController.text);
-
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                          content: Text(LocaleStrings.registering)));
+                          content: Text(LocaleStrings.changingPassword)));
                     }
                   },
                   child: const Expanded(
                     flex: 1,
                     child: Text(
-                      LocaleStrings.registerBtn,
+                      LocaleStrings.changePasswordBtn,
                       style: TextStyle(fontWeight: FontWeight.w900),
                     ),
                   ),
@@ -191,18 +171,17 @@ class RegFormState extends State<RegForm> {
             text: TextSpan(
               style: DefaultTextStyle.of(context).style,
               children: <TextSpan>[
-                const TextSpan(text: "${LocaleStrings.alreadyHaveAnAccount} "),
+                const TextSpan(text: LocaleStrings.donotHaveAnAccount),
                 TextSpan(
-                  text: LocaleStrings.loginBtn,
-                  style: const TextStyle(color: AppConstants.primaryColor),
-                  recognizer: TapGestureRecognizer()
-                    ..onTap = () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const LoginScreen()));
-                    },
-                )
+                    text: LocaleStrings.registerBtn,
+                    style: const TextStyle(color: AppConstants.primaryColor),
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const RegisterScreen()));
+                      })
               ],
             ),
           )

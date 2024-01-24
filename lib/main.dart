@@ -1,10 +1,14 @@
+import 'package:flt_challenge/bloc/auth_provider.dart';
 import 'package:flt_challenge/constants/app_constants.dart';
-import 'package:flt_challenge/screen/login/login.dart';
-import 'package:flt_challenge/screen/register/register.dart';
+import 'package:flt_challenge/constants/app_strings.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import 'screen/homepage.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(ChangeNotifierProvider(
+      create: (context) => AuthProvider(), child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -13,57 +17,17 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    // Since Authentiation is core part of our application, we expose it at the root tree.
     return MaterialApp(
-      title: 'Flutter Challenge',
+      title: LocaleStrings.appTitle,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: AppConstants.primaryColor),
         useMaterial3: true,
       ),
       debugShowCheckedModeBanner: false,
-      home: const HomePage(title: 'Flutter Challenge'),
-      // home: LoginScreen(),
-    );
-  }
-}
-
-class HomePage extends StatelessWidget {
-  const HomePage({super.key, required this.title});
-  final String title;
-
-  @override
-  Widget build(BuildContext context) {
-
-    return Scaffold(
-      appBar: AppBar(
-        toolbarHeight: 220,
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            GestureDetector(
-              onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const LoginScreen())),
-              child: const Padding(
-                padding:  EdgeInsets.all(16.0),
-                child:  Text("Login"),
-              ),
-            ),
-            GestureDetector(
-              onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const RegisterScreen())),
-              child: const Padding(
-                padding:  EdgeInsets.all(16.0),
-                child: Text("Register"),
-              ),
-            ),
-          ],
-        ),
-      ),
-// This trailing comma makes auto-formatting nicer for build methods.
+      home: const HomePage(title: LocaleStrings.appTitle),
+      // home: LoginScre
+      // en(),
     );
   }
 }
