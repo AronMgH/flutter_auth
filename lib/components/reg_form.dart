@@ -1,10 +1,11 @@
-import 'package:flt_challenge/bloc/auth_provider.dart';
-import 'package:flt_challenge/constants/app_constants.dart';
-import 'package:flt_challenge/constants/app_strings.dart';
-import 'package:flt_challenge/screen/login/login.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../provider/auth_provider.dart';
+import '/constants/app_strings.dart';
+import '/constants/app_constants.dart';
+import '/screen/login/login.dart';
 
 class RegForm extends StatefulWidget {
   const RegForm({super.key});

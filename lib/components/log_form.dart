@@ -1,11 +1,12 @@
-import 'package:flt_challenge/bloc/auth_provider.dart';
-import 'package:flt_challenge/constants/app_constants.dart';
-import 'package:flt_challenge/constants/app_strings.dart';
-import 'package:flt_challenge/screen/register/register.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
+
+import '/provider/auth_provider.dart';
+import '/constants/app_constants.dart';
+import '/constants/app_strings.dart';
+import '/screen/register/register.dart';
 
 class LgForm extends StatefulWidget {
   const LgForm({super.key});

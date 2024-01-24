@@ -1,5 +1,5 @@
-import "package:flt_challenge/bloc/auth_provider.dart";
-import "package:flt_challenge/bloc/auth_states.dart";
+import 'package:flt_challenge/provider/auth_provider.dart';
+import 'package:flt_challenge/provider/auth_states.dart';
 import "package:flt_challenge/components/custom_app_bar.dart";
 import "package:flt_challenge/constants/app_constants.dart";
 import "package:flt_challenge/constants/app_strings.dart";

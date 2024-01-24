@@ -1,9 +1,9 @@
-import 'package:flt_challenge/bloc/auth_provider.dart';
-import 'package:flt_challenge/constants/app_constants.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../constants/app_constants.dart';
+import '../provider/auth_provider.dart';
 import '../constants/app_strings.dart';
 import '../screen/register/register.dart';
 
@@ -171,7 +171,7 @@ class ChangePasswordFormState extends State<ChangePasswordForm> {
             text: TextSpan(
               style: DefaultTextStyle.of(context).style,
               children: <TextSpan>[
-                const TextSpan(text: LocaleStrings.donotHaveAnAccount),
+                const TextSpan(text: "${LocaleStrings.donotHaveAnAccount} "),
                 TextSpan(
                     text: LocaleStrings.registerBtn,
                     style: const TextStyle(color: AppConstants.primaryColor),
